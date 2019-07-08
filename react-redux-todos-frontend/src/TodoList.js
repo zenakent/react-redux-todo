@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import Todo from "./Todo";
 import { connect } from "react-redux";
-import { addTodo, removeTodo, editTodo, completeTodo } from "./actionCreators";
+import {
+  addTodo,
+  removeTodo,
+  editTodo,
+  completeTodo,
+  getTodos
+} from "./actionCreators";
 import { Route } from "react-router-dom";
 import NewTodoForm from "./NewTodoForm";
 
@@ -16,6 +22,10 @@ class TodoList extends Component {
     this.removeTodo = this.removeTodo.bind(this);
     this.editTodo = this.editTodo.bind(this);
     this.completeTodo = this.completeTodo.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.getTodos();
   }
 
   handleAdd(val) {
@@ -36,8 +46,7 @@ class TodoList extends Component {
   }
 
   render() {
-    console.log(this.props);
-    let todos = this.props.todos.map((val, index) => (
+    let todos = this.props.todos.map(val => (
       <Todo
         // removeTodo={this.removeTodo.bind(this, val.id)}
         removeTodo={this.removeTodo}
@@ -45,8 +54,8 @@ class TodoList extends Component {
         editTodo={this.editTodo}
         completed={val.completed}
         task={val.task}
-        key={index}
-        id={val.id}
+        key={val._id}
+        id={val._id}
         isEditing={val.isEditing}
       />
     ));
@@ -83,5 +92,5 @@ function mapStatetoProps(reduxState) {
 
 export default connect(
   mapStatetoProps,
-  { addTodo, removeTodo, editTodo, completeTodo }
+  { addTodo, removeTodo, editTodo, completeTodo, getTodos }
 )(TodoList);
